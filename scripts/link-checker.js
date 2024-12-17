@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs/promises');
 const glob = require('glob');
 const HTMLParser = require('node-html-parser');
-const fetch = require('node-fetch');
+const nFetch = require('node-fetch');
 const options = require('../.link-checker');
 
 async function checkLinks() {
@@ -150,7 +150,7 @@ async function checkLinks() {
 
         const getPageData = async () => {
           try {
-            const response = await fetch(externalPageLink, {
+            const response = await nFetch(externalPageLink, {
               headers: {
                 // Spoof a normal looking User-Agent to keep the servers happy
                 // See https://github.com/JustinBeckwith/linkinator/blob/main/src/index.ts
@@ -314,8 +314,9 @@ async function checkLinks() {
 
         if (!pageData.ok) {
           consoleError(
-            `Found broken external link on ${htmlPath}:${lineNumber}:${columnNumber}, ` +
-              `status was ${pageData.status}`
+            `Found broken external link on ${htmlPath}:${lineNumber}:${columnNumber}. ` +
+              `Link is ${hrefOrSrc}, ` +
+              `status is ${pageData.status}`
           );
           continue;
         }
